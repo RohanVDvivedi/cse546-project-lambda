@@ -3,7 +3,7 @@ import face_recognition
 import pickle
 
 input_bucket = "lambda-input-088664932081"
-output_bucket = "lambda-outputbucket-aqls5g3tm1f5"
+output_bucket = "lambda-output-cse546"
 
 # Function to read the 'encoding' file
 def open_encoding(filename):
