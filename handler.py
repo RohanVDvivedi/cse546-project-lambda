@@ -16,6 +16,7 @@ def face_recognition_handler(event, context):
 	# upload images of all known people into face_recognition library
 	
 	# extract key of the file pushed
+	print(event)
 	key = event['Records'][0]['s3']['object']['key']
 	print("Hello + " + key)
 
