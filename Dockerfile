@@ -61,6 +61,7 @@ RUN python${RUNTIME_VERSION} -m pip install -r requirements.txt --target ${FUNCT
 COPY entry.sh /
 
 # Copy function code
+COPY encoding ${FUNCTION_DIR}
 COPY handler.py ${FUNCTION_DIR}
 RUN chmod 777 /entry.sh
 
