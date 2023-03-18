@@ -11,10 +11,6 @@ import os
 import shutil
 import pathlib
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 input_bucket = "lambda-input-088664932081"
 output_bucket = "lambda-outputbucket-aqls5g3tm1f5"
 dynamoDB_table_name = "students"
@@ -87,14 +83,11 @@ def upload_csv_to_s3(csv_file_path, bucket_name, object_name):
     return True
 
 def check_dynamoDB(video_name,person_name):
-	#abhisheks function
-	#check if any name present in dynamoBD by name
 	dynamodb = aws_session.resource('dynamodb')
 	table = dynamodb.Table(dynamoDB_table_name)
 	response = table.query(
         KeyConditionExpression=Key('name').eq(person_name),
     )
-
 	details = response['Items'][0]
 
 	data_csv = [details['name'], details['major'], details['year']]
@@ -105,16 +98,3 @@ def check_dynamoDB(video_name,person_name):
 		writer.writerow(data_csv)
 
 	upload_csv_to_s3(csv_file_path,output_bucket,details)
-	
-	if response['Count'] > 0:
-		print('Name exists in the table.')
-		return True
-	else:
-		print('Name does not exist in the table.')
-		return False
-
-
-	#if present psuh csv data to S3 output bucket.
-	#(id,name,year) t S3 out.
-
-	#if pushed return ture, else false
