@@ -11,9 +11,9 @@ import os
 import shutil
 import pathlib
 
-dynamoDB_table_name = "students"
 input_bucket = "inputbucket-088664932081"
 output_bucket = "lambda-output-cse546"
+dynamoDB_table_name = "students"
 
 aws_session = boto3.Session(
 	aws_access_key_id = "",
@@ -67,7 +67,7 @@ def face_recognition_handler(event, context):
 
 def upload_csv_to_s3(csv_file_path, bucket_name, object_name):
     # Create an S3 client
-    s3 = boto3.client('s3')
+    s3 = aws_session.client('s3')
 
     # Upload the CSV file to the S3 bucket
     try:
@@ -95,3 +95,10 @@ def check_dynamoDB(video_name,person_name):
 		writer.writerow(data_csv)
 
 	upload_csv_to_s3(csv_file_path,output_bucket,details)
+	delete_csv_file(csv_file_path)
+
+def delete_csv_file(file_path):
+    s3 = aws_session.resource('s3')
+    key = os.path.basename(file_path)
+    s3.Object(output_bucket, key).delete()
+
