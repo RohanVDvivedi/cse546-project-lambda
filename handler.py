@@ -16,7 +16,7 @@ input_bucket = "inputbucket-088664932081"
 output_bucket = "lambda-output-cse546"
 
 aws_session = boto3.Session(
-    aws_access_key_id = "",
+	aws_access_key_id = "",
     aws_secret_access_key = "",
     region_name="us-east-1"
 )
@@ -36,7 +36,7 @@ def face_recognition_handler(event, context):
 	s3_client = aws_session.client('s3')
 	if not os.path.exists("/tmp/temp"):
 		os.makedirs("/tmp/temp")
-	s3_client.download_file(input_bucket, key, os.getcwd() + "/temp")
+	s3_client.download_file(input_bucket, key, "/tmp/temp")
 
 	# convert the video file to set of frames
 	os.system("ffmpeg -i /tmp/temp/" + key + " -r 1 /tmp/temp/image-%3d.jpeg")
