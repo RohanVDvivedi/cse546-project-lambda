@@ -67,19 +67,15 @@ def face_recognition_handler(event, context):
 	# delete all frames and images
 	shutil.rmtree("/tmp/temp")
 
-def upload_csv_to_s3(csv_file_path, bucket_name, object_name):
+def upload_csv_to_s3(csv_file_path, bucket_name, video_name):
     # Create an S3 client
     s3 = aws_session.client('s3')
 
     # Upload the CSV file to the S3 bucket
     try:
-        response = s3.upload_file(csv_file_path, bucket_name, object_name)
+        s3.upload_file(csv_file_path, bucket_name, video_name)
     except Exception as e:
         print(f"Error uploading CSV file: {str(e)}")
-        return False
-
-    print(f"CSV file uploaded to S3 bucket {bucket_name} with object name {object_name}")
-    return True
 
 def check_dynamoDB(video_name,person_name):
 	dynamodb = aws_session.resource('dynamodb')
@@ -92,16 +88,13 @@ def check_dynamoDB(video_name,person_name):
 
 	data_csv = [details['name'], details['major'], details['year']]
 
-	csv_file_path = '/tmp/{}.csv'.format(video_name)
+	v_name = video_name.split('.')[0]
+	csv_file_path = '/tmp/temp/{}.csv'.format(v_name)
 	with open(csv_file_path, 'w', encoding='UTF8') as f:
 		writer = csv.writer(f)
 		writer.writerow(data_csv)
 
-	upload_csv_to_s3(csv_file_path,output_bucket,details)
-	delete_csv_file(csv_file_path)
+	upload_csv_to_s3(csv_file_path,output_bucket,v_name)
 
-def delete_csv_file(file_path):
-    s3 = aws_session.resource('s3')
-    key = os.path.basename(file_path)
-    s3.Object(output_bucket, key).delete()
+
 
