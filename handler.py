@@ -42,14 +42,19 @@ def face_recognition_handler(event, context):
 	# convert the video file to set of frames
 	os.system("ffmpeg -i /tmp/temp/" + key + " -r 1 /tmp/temp/image-%3d.jpeg")
 
+	print("conversion of .mp4 to .jpeg-s completed")
+
 	# load images of all known people into face_recognition library
 	model = open_encoding("/home/app/encoding")
 	model_encoding = model['encoding']
 	names_list = model['name']
 
 	# loop over the frames of the ffmpeg extracting each frames
+	frame_paths = list(pathlib.Path("/tmp/temp").glob('*.jpeg'))
+	frame_paths.sort()
+	print(frame_paths)
 	done = False
-	for frame_path in list(pathlib.Path("/tmp/temp").glob('*.jpeg')) :
+	for frame_path in frame_paths :
 		print(frame_path)
 		frame = face_recognition.load_image_file(frame_path)
 		frame_encoding = face_recognition.face_encodings(frame)[0]
