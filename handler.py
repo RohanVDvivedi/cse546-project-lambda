@@ -31,12 +31,13 @@ def open_encoding(filename):
 def face_recognition_handler(event, context):
 	# extract key of the file pushed
 	key = event['Records'][0]['s3']['object']['key']
+	print(key)
 
 	# save the video file to cwd/temp
 	s3_client = aws_session.client('s3')
 	if not os.path.exists("/tmp/temp"):
 		os.makedirs("/tmp/temp")
-	s3_client.download_file(input_bucket, key, "/tmp/temp")
+	s3_client.download_file(input_bucket, key, "/tmp/temp/" + key)
 
 	# convert the video file to set of frames
 	os.system("ffmpeg -i /tmp/temp/" + key + " -r 1 /tmp/temp/image-%3d.jpeg")
