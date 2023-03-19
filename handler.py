@@ -50,6 +50,7 @@ def face_recognition_handler(event, context):
 	# loop over the frames of the ffmpeg extracting each frames
 	done = False
 	for frame_path in list(pathlib.Path("/tmp/temp").glob('*.jpeg')) :
+		print(frame_path)
 		frame = face_recognition.load_image_file(frame_path)
 		frame_encoding = face_recognition.face_encodings(frame)[0]
 		results = face_recognition.compare_faces(model_encoding, frame_encoding)
