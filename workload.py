@@ -1,7 +1,7 @@
 from boto3 import client as boto3_client
 import os
 
-input_bucket = "lambda-input-088664932081"
+input_bucket = "inputbucket-088664932081"
 output_bucket = "lambda-output-cse546"
 test_cases = "test_cases/"
 
