@@ -85,7 +85,8 @@ def check_dynamoDB(video_name,person_name):
 	dynamodb = aws_session.resource('dynamodb')
 	table = dynamodb.Table(dynamoDB_table_name)
 	response = table.get_item(Key={'name': {'S': person_name}})
-	details = response['Items'][0]
+	details = response['Items']
+	print("details:",details)
 
 	data_csv = [details['name'], details['major'], details['year']]
 
