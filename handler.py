@@ -31,7 +31,6 @@ def open_encoding(filename):
 def face_recognition_handler(event, context):
 	# extract key of the file pushed
 	key = event['Records'][0]['s3']['object']['key']
-	print(key)
 
 	# save the video file to cwd/temp
 	s3_client = aws_session.client('s3')
@@ -42,8 +41,6 @@ def face_recognition_handler(event, context):
 	# convert the video file to set of frames
 	os.system("ffmpeg -i /tmp/temp/" + key + " -r 1 /tmp/temp/image-%3d.jpeg")
 
-	print("conversion of .mp4 to .jpeg-s completed")
-
 	# load images of all known people into face_recognition library
 	model = open_encoding("/home/app/encoding")
 	model_encoding = model['encoding']
@@ -52,7 +49,6 @@ def face_recognition_handler(event, context):
 	# loop over the frames of the ffmpeg extracting each frames
 	frame_paths = list(pathlib.Path("/tmp/temp").glob('*.jpeg'))
 	frame_paths.sort()
-	print(frame_paths)
 	done = False
 	for frame_path in frame_paths :
 		print(frame_path)
