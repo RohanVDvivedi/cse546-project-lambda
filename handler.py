@@ -29,8 +29,11 @@ def open_encoding(filename):
 	return data
 
 def face_recognition_handler(event, context):
-	# extract key of the file pushed
-	key = event['Records'][0]['s3']['object']['key']
+	# extract key of the file pushed project2
+	#key = event['Records'][0]['s3']['object']['key']
+
+	# extract key of the file pushed project3
+	key = event['key']
 
 	# save the video file to cwd/temp
 	s3_client = aws_session.client('s3')
