@@ -11,8 +11,8 @@ import os
 import shutil
 import pathlib
 
-input_bucket = "inputbucket-088664932081"
-output_bucket = "lambda-output-cse546"
+input_bucket = "inputbucketproject3new"
+output_bucket = "outputbucketproject3new"
 dynamoDB_table_name = "students"
 
 aws_session = boto3.Session(
