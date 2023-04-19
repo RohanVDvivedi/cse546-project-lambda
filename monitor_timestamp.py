@@ -2,6 +2,8 @@ import os
 import boto3
 from datetime import datetime
 import time
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import as_completed
 
 aws_session = boto3.Session(
     aws_access_key_id="AKIARJJGXP3YRNZOPD72",
@@ -26,9 +28,16 @@ def main():
             # sort the objects by last modified time in descending order, latest last_modified will be first
             objectKeys = sorted(objectKeys, key=lambda obj: obj['LastModified'], reverse=True)
             tPrev = objectKeys[0]['LastModified']
-            for objKey in objectKeys:
+
+            # single threaded
+            #for objKey in objectKeys:
                 # Invoke the Lambda function with the object key as input
-                lambda_client.invoke(FunctionName='lambdaforproject3', Payload='{"key":"' + objKey['Key'] + '"}')
+                #lambda_client.invoke(FunctionName='lambdaforproject3', Payload='{"key":"' + objKey['Key'] + '"}')
+            
+            # multithreaded
+            keys = [objKey['Key'] for objKey in objectKeys]
+            with ThreadPoolExecutor(max_workers = 10) as executor:
+                executor.map(lambda key : lambda_client.invoke(FunctionName='lambdaforproject3', Payload='{"key":"' + key + '"}'), keys)
 
 if __name__ == '__main__':
     main()
