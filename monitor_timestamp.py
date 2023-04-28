@@ -30,14 +30,14 @@ def main():
             tPrev = objectKeys[0]['LastModified']
 
             # single threaded
-            for objKey in objectKeys:
+            #for objKey in objectKeys:
                 # Invoke the Lambda function with the object key as input
-                lambda_client.invoke(FunctionName='lambdaforproject3', Payload='{"key":"' + objKey['Key'] + '"}')
+                #lambda_client.invoke(FunctionName='lambdaforproject3', Payload='{"key":"' + objKey['Key'] + '"}')
             
             # multithreaded
-            #keys = [objKey['Key'] for objKey in objectKeys]
-            #with ThreadPoolExecutor(max_workers = 5) as executor:
-                #executor.map(lambda key : lambda_client.invoke(FunctionName='lambdaforproject3', Payload='{"key":"' + key + '"}'), keys)
+            keys = [objKey['Key'] for objKey in objectKeys]
+            with ThreadPoolExecutor(max_workers = 3) as executor:
+                executor.map(lambda key : lambda_client.invoke(FunctionName='lambdaforproject3', Payload='{"key":"' + key + '"}'), keys)
 
 if __name__ == '__main__':
     main()
